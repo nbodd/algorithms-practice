@@ -13,14 +13,14 @@
 
 using namespace std;
 
-void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance) {
+void bfs(const Graph & graph, Node start, vector<Node> & parent, vector<int> & distance) {
     vector<bool> visited;
     
     visited.resize(graph.nodeTraverseLimit(), false);
     parent.resize(graph.nodeTraverseLimit(), -1);
     distance.resize(graph.nodeTraverseLimit(), -1);
     
-    queue<int> foundNodes;
+    queue<Node> foundNodes;
     parent[start] = -1;
     visited[start] = true;
     distance[start] = 0;
@@ -28,7 +28,7 @@ void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & dis
     foundNodes.push(start);
     
     while (!foundNodes.empty()) {
-        int node = foundNodes.front();
+        Node node = foundNodes.front();
         foundNodes.pop();
         
         const vector<Edge *> & nodeEdges = graph.getEdges(node);
@@ -46,7 +46,7 @@ void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & dis
 }
 
 
-void recurseDfs(const Graph & graph, int node, vector<int> & parent,
+void recurseDfs(const Graph & graph, Node node, vector<Node> & parent,
                         vector<int> & distance, vector<bool> visited) {
     const vector<Edge *> & nodeEdges = graph.getEdges(node);
     for (auto edge : nodeEdges) {
@@ -60,7 +60,7 @@ void recurseDfs(const Graph & graph, int node, vector<int> & parent,
     }
 }
 
-void dfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance) {
+void dfs(const Graph & graph, Node start, vector<Node> & parent, vector<int> & distance) {
     vector<bool> visited;
     
     visited.resize(graph.nodeTraverseLimit(), false);
@@ -76,7 +76,7 @@ void dfs(const Graph & graph, int start, vector<int> & parent, vector<int> & dis
 
 class EdgeCompare {
 public:
-    bool operator()(pair<int, int> & a, pair<int, int> & b) {
+    bool operator()(pair<int, Node> & a, pair<int, Node> & b) {
         return a.first > b.first;
     }
 };
@@ -88,15 +88,15 @@ void dijkstra(const Graph & graph, int start, vector<int> & parent, vector<int> 
     parent.resize(graph.nodeTraverseLimit(), -1);
     distance.resize(graph.nodeTraverseLimit(), MAX_PATH_VALUE);
     
-    priority_queue< pair<int, int>, vector< pair<int, int> >, EdgeCompare >foundNodes;
+    priority_queue< pair<int, Node>, vector< pair<int, Node> >, EdgeCompare >foundNodes;
     
     parent[start] = -1;
     distance[start] = 0;
     
-    foundNodes.push(pair<int, int>(0, start));
+    foundNodes.push(pair<int, Node>(0, start));
     
     while (false == foundNodes.empty()) {
-        int node = foundNodes.top().second;
+        Node node = foundNodes.top().second;
         foundNodes.pop();
         
         if (false == visited[node]) {
@@ -104,12 +104,12 @@ void dijkstra(const Graph & graph, int start, vector<int> & parent, vector<int> 
             
             const vector<Edge *> & edges = graph.getEdges(node);
             for (auto edge : edges) {
-                int neighbor = edge->to;
+                Node neighbor = edge->to;
                 bool neighborNotVisited = (visited[neighbor] == false);
                 
                 int altDistance = distance[node] + edge->weight;
                 if ( neighborNotVisited && (altDistance < distance[neighbor]) ) {
-                    foundNodes.push(pair<int, int>(altDistance, neighbor));
+                    foundNodes.push(pair<int, Node>(altDistance, neighbor));
                     distance[neighbor] = altDistance;
                     parent[neighbor] = node;
                 }

@@ -13,9 +13,11 @@
 
 using namespace std;
 
+typedef int Node;
+
 struct Edge {
-    int from;
-    int to;
+    Node from;
+    Node to;
     int weight;
 };
 
@@ -66,10 +68,10 @@ private:
     vector< vector<Edge *> *> m_edges;
 };
 
-void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance);
+void bfs(const Graph & graph, Node start, vector<Node> & parent, vector<int> & distance);
 
-void dfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance);
+void dfs(const Graph & graph, Node start, vector<Node> & parent, vector<int> & distance);
 
-void dijkstra(const Graph & graph, int start, vector<int> & parent, vector<int> & distance);
+void dijkstra(const Graph & graph, Node start, vector<Node> & parent, vector<int> & distance);
 
 #endif /* Graph_h */
