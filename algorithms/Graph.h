@@ -19,6 +19,9 @@ struct Edge {
     int weight;
 };
 
+
+const int MAX_PATH_VALUE = 350000;
+
 class Graph {
 public:
     Graph(int numNodes, int numEdges) {
@@ -66,5 +69,7 @@ private:
 void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance);
 
 void dfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance);
+
+void dijkstra(const Graph & graph, int start, vector<int> & parent, vector<int> & distance);
 
 #endif /* Graph_h */

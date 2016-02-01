@@ -20,11 +20,10 @@ void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & dis
     parent.resize(graph.nodeTraverseLimit(), -1);
     distance.resize(graph.nodeTraverseLimit(), -1);
     
-    int time = 0;
     queue<int> foundNodes;
     parent[start] = -1;
     visited[start] = true;
-    distance[start] = time;
+    distance[start] = 0;
     
     foundNodes.push(start);
     
@@ -47,7 +46,8 @@ void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & dis
 }
 
 
-void recurseDfs(const Graph & graph, int node, vector<int> & parent, vector<int> & distance, vector<bool> visited) {
+void recurseDfs(const Graph & graph, int node, vector<int> & parent,
+                        vector<int> & distance, vector<bool> visited) {
     const vector<Edge *> & nodeEdges = graph.getEdges(node);
     for (auto edge : nodeEdges) {
         int neighbor = edge->to;
@@ -74,3 +74,46 @@ void dfs(const Graph & graph, int start, vector<int> & parent, vector<int> & dis
     recurseDfs(graph, start, parent, distance, visited);
 }
 
+class EdgeCompare {
+public:
+    bool operator()(pair<int, int> & a, pair<int, int> & b) {
+        return a.first > b.first;
+    }
+};
+
+void dijkstra(const Graph & graph, int start, vector<int> & parent, vector<int> & distance) {
+    vector<bool> visited;
+    
+    visited.resize(graph.nodeTraverseLimit(), false);
+    parent.resize(graph.nodeTraverseLimit(), -1);
+    distance.resize(graph.nodeTraverseLimit(), MAX_PATH_VALUE);
+    
+    priority_queue< pair<int, int>, vector< pair<int, int> >, EdgeCompare >foundNodes;
+    
+    parent[start] = -1;
+    distance[start] = 0;
+    
+    foundNodes.push(pair<int, int>(0, start));
+    
+    while (false == foundNodes.empty()) {
+        int node = foundNodes.top().second;
+        foundNodes.pop();
+        
+        if (false == visited[node]) {
+            visited[node] = true;
+            
+            const vector<Edge *> & edges = graph.getEdges(node);
+            for (auto edge : edges) {
+                int neighbor = edge->to;
+                bool neighborNotVisited = (visited[neighbor] == false);
+                
+                int altDistance = distance[node] + edge->weight;
+                if ( neighborNotVisited && (altDistance < distance[neighbor]) ) {
+                    foundNodes.push(pair<int, int>(altDistance, neighbor));
+                    distance[neighbor] = altDistance;
+                    parent[neighbor] = node;
+                }
+            }
+        }
+    }
+}
