@@ -46,3 +46,31 @@ void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & dis
     }
 }
 
+
+void recurseDfs(const Graph & graph, int node, vector<int> & parent, vector<int> & distance, vector<bool> visited) {
+    const vector<Edge *> & nodeEdges = graph.getEdges(node);
+    for (auto edge : nodeEdges) {
+        int neighbor = edge->to;
+        if (false == visited[neighbor]) {
+            parent[neighbor] = node;
+            visited[neighbor] = true;
+            distance[neighbor] = distance[node] + 1;
+            recurseDfs(graph, neighbor, parent, distance, visited);
+        }
+    }
+}
+
+void dfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance) {
+    vector<bool> visited;
+    
+    visited.resize(graph.nodeTraverseLimit(), false);
+    parent.resize(graph.nodeTraverseLimit(), -1);
+    distance.resize(graph.nodeTraverseLimit(), -1);
+    
+    parent[start] = -1;
+    visited[start] = true;
+    distance[start] = 0;
+    
+    recurseDfs(graph, start, parent, distance, visited);
+}
+

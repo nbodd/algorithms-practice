@@ -65,4 +65,6 @@ private:
 
 void bfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance);
 
+void dfs(const Graph & graph, int start, vector<int> & parent, vector<int> & distance);
+
 #endif /* Graph_h */
