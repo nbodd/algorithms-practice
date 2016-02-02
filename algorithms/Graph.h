@@ -21,14 +21,21 @@ struct Edge {
     int weight;
 };
 
+enum class GraphType {
+    UNIQUE_EDGE,
+    MULTIPLE_EDGE,
+    DIRECTED_UNIQUE_EDGE,
+    DIRECTED_MULTIPLE_EDGE
+};
 
 const int MAX_PATH_VALUE = 350000;
 
 class Graph {
 public:
-    Graph(int numNodes, int numEdges) {
+    Graph(int numNodes, GraphType graphType = GraphType::MULTIPLE_EDGE) {
         m_numNodes = numNodes;
-        m_numEdges = numEdges;
+        m_numEdges = 0;
+        m_graphType = graphType;
         
         m_edges.resize(m_numNodes + 1);
         for (int i=0; i<nodeTraverseLimit(); ++i) {
@@ -50,12 +57,50 @@ public:
     }
     
     void addEdge(int x, int y, int r) {
-        Edge *e = new Edge;
-        e->weight = r;
-        e->from = x;
-        e->to = y;
+        if (m_graphType == GraphType::UNIQUE_EDGE || m_graphType == GraphType::DIRECTED_UNIQUE_EDGE) {
+            bool edgeFound = false;
+            const auto& xEdges = getEdges(x);
+            for (auto edge : xEdges) {
+                // assume the latest one overwrites the earlier one
+                if (edge->to == y) {
+                    edge->weight = r;
+                    edgeFound = true;
+                }
+            }
+            
+            if (m_graphType == GraphType::UNIQUE_EDGE) {
+                const auto& yEdges = getEdges(y);
+                for (auto edge : yEdges) {
+                    // assume latest edges overwrites the earlier one
+                    if (edge->to == x) {
+                        edge->weight = r;
+                        edgeFound = true;
+                    }
+                }
+            }
+            
+            if (edgeFound) {
+                return;
+            }
+        }
         
-        m_edges[x]->push_back(e);
+        Edge *eX = new Edge;
+        eX->weight = r;
+        eX->from = x;
+        eX->to = y;
+        
+        m_edges[x]->push_back(eX);
+        m_numEdges++;
+        
+        if (m_graphType == GraphType::MULTIPLE_EDGE || m_graphType == GraphType::UNIQUE_EDGE ) {
+            Edge *eY = new Edge;
+            eY->weight = r;
+            eY->from = y;
+            eY->to = x;
+            
+            m_edges[y]->push_back(eY);
+            m_numEdges++;
+        }
     }
     
     const vector<Edge *>& getEdges(int node) const {
@@ -65,6 +110,7 @@ public:
 private:
     int m_numNodes;
     int m_numEdges;
+    GraphType m_graphType;
     vector< vector<Edge *> *> m_edges;
 };
 
@@ -73,5 +119,7 @@ void bfs(const Graph & graph, Node start, vector<Node> & parent, vector<int> & d
 void dfs(const Graph & graph, Node start, vector<Node> & parent, vector<int> & distance);
 
 void dijkstra(const Graph & graph, Node start, vector<Node> & parent, vector<int> & distance);
+
+void floydWarshall(const Graph & graph, vector<vector<int>> & distance);
 
 #endif /* Graph_h */
