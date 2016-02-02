@@ -74,13 +74,6 @@ void dfs(const Graph & graph, Node start, vector<Node> & parent, vector<int> & d
     recurseDfs(graph, start, parent, distance, visited);
 }
 
-class EdgeCompare {
-public:
-    bool operator()(pair<int, Node> & a, pair<int, Node> & b) {
-        return a.first > b.first;
-    }
-};
-
 void dijkstra(const Graph & graph, int start, vector<int> & parent, vector<int> & distance) {
     vector<bool> visited;
     

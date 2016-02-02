@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "Graph.h"
+#include "Tree.h"
 
 using namespace std;
 
@@ -23,12 +24,12 @@ int main(int argc, const char * argv[]) {
         int edges;
         cin >> edges;
         
-        Graph graph(nodes, GraphType::DIRECTED_UNIQUE_EDGE);
+        GraphTree graph(nodes);
         
         for (int edgeNumber = 0; edgeNumber < edges; ++edgeNumber) {
-            int x, y, r;
-            cin >> x >> y >> r;
-            graph.addEdge(x, y, r);
+            int x, y, r = 1;
+            cin >> x >> y;
+            graph.addEdge(y, x, r);
         }
         
         /*
@@ -50,9 +51,9 @@ int main(int argc, const char * argv[]) {
         graph.addEdge(5, 4, 6);
         
         int start = 1;
-        */
         
-        //vector<int> parent;
+        
+        vector<int> parent;
         vector<vector<int>> distance;
         floydWarshall(graph, distance);
         
@@ -64,6 +65,10 @@ int main(int argc, const char * argv[]) {
             cout << ((distance[x][y] !=  MAX_PATH_VALUE) ? distance[x][y] : -1 ) << endl;
             
         }
+         */
+        
+        cout << evenTree(graph);
+        
         cout << endl;
     }
     

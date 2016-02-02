@@ -107,11 +107,26 @@ public:
         return *m_edges[node];
     }
     
+    inline int getNumNodes() const {
+        return m_numNodes;
+    }
+    
+    inline int getNumEdges() const {
+        return m_numEdges;
+    }
+    
 private:
     int m_numNodes;
     int m_numEdges;
     GraphType m_graphType;
     vector< vector<Edge *> *> m_edges;
+};
+
+class EdgeCompare {
+public:
+    bool operator()(pair<int, Node> & a, pair<int, Node> & b) {
+        return a.first > b.first;
+    }
 };
 
 void bfs(const Graph & graph, Node start, vector<Node> & parent, vector<int> & distance);
