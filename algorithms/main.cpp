@@ -12,12 +12,14 @@
 
 using namespace std;
 
-int main(int argc, const char * argv[]) {
+
+
+int graph_main(int argc, const char * argv[]) {
     
     int testCases = 1;
-    //cin >> testCases;
+    cin >> testCases;
     for (int test = 0; test < testCases; ++test) {
-        
+        /*
         int nodes;
         cin >> nodes;
         
@@ -32,7 +34,6 @@ int main(int argc, const char * argv[]) {
             graph.addEdge(y, x, r);
         }
         
-        /*
         Graph graph(7, 9);
         graph.addEdge(1, 2, 7);
         graph.addEdge(1, 3, 9);
@@ -65,11 +66,8 @@ int main(int argc, const char * argv[]) {
             cout << ((distance[x][y] !=  MAX_PATH_VALUE) ? distance[x][y] : -1 ) << endl;
             
         }
-         */
+        */
         
-        cout << evenTree(graph);
-        
-        cout << endl;
     }
     
     return 0;

@@ -1,6 +1,6 @@
 
 
-def main() :
+def sherlockArray() :
     testCases = int(raw_input())
     for test in range(testCases):
         length = int(raw_input())
@@ -29,6 +29,17 @@ def main() :
             print 'YES'
         else:
             print 'NO'
+
+def main():
+    V = int(raw_input())
+    n = int(raw_input())
+
+    A = map(int, (raw_input().split(' ')))
+    print A
+    for i in range(n):
+        if A[i] == V:
+            print i
+            break
 
 if __name__ == '__main__' :
     main()
