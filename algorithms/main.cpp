@@ -14,26 +14,27 @@ using namespace std;
 
 
 
-int graph_main(int argc, const char * argv[]) {
-    
+int oldmain(int argc, const char * argv[]) {
+    /*
     int testCases = 1;
     cin >> testCases;
     for (int test = 0; test < testCases; ++test) {
-        /*
+        
         int nodes;
         cin >> nodes;
         
         int edges;
         cin >> edges;
         
-        GraphTree graph(nodes);
+        Graph graph(nodes);
         
         for (int edgeNumber = 0; edgeNumber < edges; ++edgeNumber) {
             int x, y, r = 1;
             cin >> x >> y;
             graph.addEdge(y, x, r);
         }
-        
+         
+     
         Graph graph(7, 9);
         graph.addEdge(1, 2, 7);
         graph.addEdge(1, 3, 9);
@@ -66,9 +67,13 @@ int graph_main(int argc, const char * argv[]) {
             cout << ((distance[x][y] !=  MAX_PATH_VALUE) ? distance[x][y] : -1 ) << endl;
             
         }
-        */
+     
+        
+        cout << crab_graphs(graph, feet) << endl;
         
     }
+     
+     */
     
     return 0;
 }

@@ -13,7 +13,7 @@ void printArray(vector<int>& arr) {
 }
 
 int insertionSort(vector<int>& ar) {
-    int ar_size = ar.size();
+    int ar_size = (int) ar.size();
     if (ar_size <= 1) {
         return 0;
     }
@@ -32,8 +32,6 @@ int insertionSort(vector<int>& ar) {
     return count;
 }
 
-
-static int quickSortCount = 0;
 
 int partition(vector<int>& arr, int startIndex, int endIndex, int & count) {
     
@@ -88,7 +86,7 @@ int sorting_main()
     }
     
     vector<int> arr2(arr);
-    int qck = quickSort(arr, 0, arr.size() - 1);
+    int qck = quickSort(arr, 0, (int) arr.size() - 1);
     int ins = insertionSort(arr2);
     cout << ins - qck;
     
