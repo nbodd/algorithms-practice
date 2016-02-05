@@ -93,3 +93,50 @@ int sorting_main()
     return 0;
 }
 
+int counting_sort() {
+    int n;
+    cin >> n;
+    int numOfTimes[100] = { 0 };
+    vector<pair<int, string>> data;
+    for (int i=0; i<n; ++i) {
+        int val;
+        cin >> val;
+        string text;
+        cin >> text;
+        
+        numOfTimes[val]++;
+        data.push_back(pair<int, string>(val, text));
+    }
+    
+    int incrementalPosition[100] = { 0 };
+    int totalSum = 0;
+    for (int i=0; i<100; ++i) {
+        incrementalPosition[i] = totalSum;
+        totalSum += numOfTimes[i];
+    }
+    
+    //positionsOfData tracks location of each data item from 0..n-1 will be placed
+    // positionOfData[i] -> i-th data member will be placed at the resulting value
+    vector<int> positionsOfData(n);
+    for (int i=0; i<n; ++i) {
+        int incrementalPositionIndex =  data[i].first;
+        positionsOfData[i] = incrementalPosition[incrementalPositionIndex];
+        incrementalPosition[incrementalPositionIndex]++;
+    }
+    
+    // reverse the positionsOfData vector
+    // Because, when we want to print, we dont care where each data element is placed,
+    // instead we want sequentially which data member is needed to be placed next
+    vector<int> reversePositionData(positionsOfData.size());
+    for (int i=0; i < positionsOfData.size(); ++i) {
+        reversePositionData[positionsOfData[i]] = i;
+    }
+    
+    for (int i=0; i<reversePositionData.size(); ++i) {
+        int dataIndex = reversePositionData[i];
+        cout << ((dataIndex >= n/2) ? data[dataIndex].second : "-") << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}
