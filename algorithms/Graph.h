@@ -137,4 +137,6 @@ void dijkstra(const Graph & graph, Node start, vector<Node> & parent, vector<int
 
 void floydWarshall(const Graph & graph, vector<vector<int>> & distance);
 
+int crab_graphs(const Graph& graph, int feet);
+
 #endif /* Graph_h */

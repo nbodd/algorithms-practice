@@ -45,7 +45,7 @@ int maximum_noncontiguous_subarray_sum(vector<int> & elements) {
     return *max_element(sum.begin(), sum.end());
 }
 
-int coin_change_problem() {
+void coin_change_problem() {
     unsigned long long money, numOfCoins;
     cin >> money >> numOfCoins;
     
@@ -80,4 +80,37 @@ int coin_change_problem() {
     }
     
     cout << coinChangeGrid[money][numOfCoins] << endl;
+}
+
+int school_teacher_candies() {
+    int N;
+    cin >> N;
+    
+    vector<int> rating(N);
+    for (int i=0; i<N; ++i) {
+        cin >> rating[i];
+    }
+    
+    vector<int> candies(N);
+    candies[0] = 1;
+    for (int i=1; i<N; ++i) {
+        if (rating[i] > rating[i-1]) {
+            candies[i] = candies[i-1] + 1;
+        } else {
+            candies[i] = 1;
+        }
+    }
+    
+    for (int j=N-1; j>0; --j) {
+        if (rating[j-1] > rating[j] && candies[j-1] <= candies[j]) {
+            candies[j-1] = candies[j] + 1;
+        }
+    }
+    
+    int sum = 0;
+    for (auto val : candies) {
+        sum += val;
+    }
+    cout << sum << endl;
+    
 }
