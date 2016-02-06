@@ -111,31 +111,6 @@ def priyanka_main():
 
     print(count)
 
-def permutation_main():
-    [N, K] = map(int, raw_input().split(' '))
-    A = map(int, raw_input().split(' '))
-
-    index = [0] * len(A)
-    for i in range(len(A)):
-        index[A[i]] = i
-
-    j = 0
-    while (j<N and K):
-        if (A[j] == (N - j)) :
-            continue
-
-        A[index[N-j]] = A[j]
-        #index[] = N-j
-
-        A[i] = N-j
-        index[N-j] = i
-
-        K -= 1
-        j += 1
-
-    for val in A:
-        print(val, end=" ")
-
 def greedy_florist():
     N, K = raw_input().split()
     N = int(N)
@@ -165,6 +140,11 @@ def greedy_florist():
         flowerNumber += 1
 
     print(result)
+
+
+def main():
+    [N, K] = map(int, raw_input().split(' '))
+    A = map(int, raw_input().split(' '))
 
 
 if __name__ == '__main__' :

@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <iostream>
+#include <queue>
 
 using namespace std;
 
@@ -77,5 +78,66 @@ int burgers_main() {
     for (auto val : delivery) {
         cout << val << " ";
     }
+    return 0;
+}
+
+// largest permutation
+int largest_permutation_main() {
+    // wrong answer, dont use
+    unsigned long long N, K;
+    cin >> N >> K;
+    
+    vector<int> A;
+    vector<unsigned long long> countOfNum(10);
+    vector<int> index(10, 0);
+    for (int i=0; i<N; ++i) {
+        int val;
+        cin >> val;
+        A.push_back(val);
+        countOfNum[val]++;
+        index[val] = i;
+    }
+    
+    queue<int> swappedElements;
+    vector<int> result;
+    int traverse = 0;
+    // greedy here
+    while (K > 0 && traverse < N) {
+        for (int digit = 9; digit >= 0; --digit) {
+            if (countOfNum[digit] > 0) {
+                
+                if (A[traverse] != digit) {
+                    break;
+                }
+                
+                result.push_back(digit);
+                swappedElements.push(A[traverse]);
+                
+                countOfNum[digit]--;
+                K--;
+                break;
+            }
+        }
+        traverse++;
+    }
+    
+    //add remaining elements in sequential order
+    while (traverse < N) {
+        int digit = A[traverse];
+        if (countOfNum[digit] > 0) {
+            result.push_back(digit);
+            countOfNum[digit]--;
+        } else {
+            result.push_back(swappedElements.front());
+            swappedElements.pop();
+        }
+        traverse++;
+    }
+    
+    for (auto val : result) {
+        cout << val << " ";
+    }
+    cout << endl;
+    
     return 0;
 }
