@@ -83,7 +83,7 @@ void ice_cream_parlor() {
     }
 }
 
-int main() {
+int bs_main() {
     int testCases;
     cin >> testCases;
 
