@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <vector>
+#include <stdint.h>
 
 using namespace std;
 
@@ -44,23 +45,39 @@ int maximum_noncontiguous_subarray_sum(vector<int> & elements) {
     return *max_element(sum.begin(), sum.end());
 }
 
-int main() {
-    int testCases;
-    cin >> testCases;
+int coin_change_problem() {
+    unsigned long long money, numOfCoins;
+    cin >> money >> numOfCoins;
     
-    for (int i=0; i<testCases; ++i) {
-        int N;
-        cin >> N;
-        
-        vector<int> elements;
-        for (int j=0; j<N; ++j) {
-            int val;
-            cin >> val;
-            elements.push_back(val);
-        }
-        cout << maximum_contiguous_subarray_sum(elements) << " " <<
-            maximum_noncontiguous_subarray_sum(elements) << endl;
+    vector<unsigned long long> coinValues(numOfCoins + 1);
+    for (int i=1; i<numOfCoins + 1; ++i) {
+        cin >> coinValues[i];
     }
     
-    return 0;
+    vector<vector<unsigned long long>> coinChangeGrid(money + 1);
+    for (int i=0 ; i < money + 1; ++i) {
+        coinChangeGrid[i] = vector<unsigned long long>();
+        coinChangeGrid[i].resize(numOfCoins + 1);
+    }
+    
+    for (int coin=0; coin < numOfCoins + 1; ++coin) {
+        coinChangeGrid[0][coin] = 1;
+    }
+    
+    for (int moneyValue=0; moneyValue <= money; ++moneyValue) {
+        coinChangeGrid[moneyValue][0] = 0;
+    }
+    
+    for (int moneyValue = 1; moneyValue <= money; ++moneyValue) {
+        for (int coin = 1; coin <= numOfCoins; ++coin) {
+            unsigned long long coinValue = coinValues[coin];
+            if (moneyValue < coinValue) {
+                coinChangeGrid[moneyValue][coin] = coinChangeGrid[moneyValue][coin-1];
+            } else {
+                coinChangeGrid[moneyValue][coin] = coinChangeGrid[moneyValue][coin-1] + coinChangeGrid[moneyValue - coinValue][coin];
+            }
+        }
+    }
+    
+    cout << coinChangeGrid[money][numOfCoins] << endl;
 }
