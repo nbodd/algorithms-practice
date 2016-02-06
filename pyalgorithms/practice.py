@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 
 def sherlockArray() :
     testCases = int(raw_input())
@@ -26,19 +26,17 @@ def sherlockArray() :
                 found = True
 
         if found:
-            print 'YES'
+            print ('YES')
         else:
-            print 'NO'
+            print ('NO')
 
 def sherlock_and_minimax(A, P, Q):
     A.sort()
 
     pValues = [abs(val - P) for val in A]
-    print pValues
     pMin = min(pValues)
 
     qValues = [abs(val - Q) for val in A]
-    print qValues
     qMin = min(qValues)
 
     firstP = P
@@ -56,11 +54,7 @@ def sherlock_and_minimax(A, P, Q):
         firstQ = A[firstPIndex + 1]
 
     median = (firstP + firstQ) / 2
-    print firstP
-    print firstQ
-    print median
     medianValues = [abs(median - val) for val in A]
-    print medianValues
 
     medianMin = min(medianValues)
 
@@ -78,7 +72,7 @@ def sherlock_minimax_main():
     A = map(int, (raw_input().split(' ')))
     P, Q = map(int, raw_input().split())
     B = sherlock_and_minimax(A, P, Q)
-    print B
+    print(B)
 
 def two_arrays_main() :
     testCases = int(raw_input())
@@ -98,9 +92,9 @@ def two_arrays_main() :
                 break
 
         if found:
-            print 'YES'
+            print('YES')
         else:
-            print 'NO'
+            print('NO')
 
 def priyanka_main():
     N = int(raw_input())
@@ -115,7 +109,62 @@ def priyanka_main():
             count += 1
             current = A[index]
 
-    print count
+    print(count)
+
+def permutation_main():
+    [N, K] = map(int, raw_input().split(' '))
+    A = map(int, raw_input().split(' '))
+
+    index = [0] * len(A)
+    for i in range(len(A)):
+        index[A[i]] = i
+
+    j = 0
+    while (j<N and K):
+        if (A[j] == (N - j)) :
+            continue
+
+        A[index[N-j]] = A[j]
+        #index[] = N-j
+
+        A[i] = N-j
+        index[N-j] = i
+
+        K -= 1
+        j += 1
+
+    for val in A:
+        print(val, end=" ")
+
+def greedy_florist():
+    N, K = raw_input().split()
+    N = int(N)
+    K = int(K)
+    C = []
+
+    numbers = raw_input()
+
+    i = 0
+    for number in numbers.split():
+       C.append( int(number) )
+       i = i + 1
+
+    flowers = C
+    flowers.sort(reverse=True)
+
+    flowersPerPerson = [0] * K
+    person = 0
+    result = 0
+    flowerNumber = 0
+    while flowerNumber < len(flowers):
+        flower = flowers[flowerNumber]
+        result += (flowersPerPerson[person] + 1) * flower
+
+        flowersPerPerson[person] += 1
+        person = (person + 1) % K
+        flowerNumber += 1
+
+    print(result)
 
 
 if __name__ == '__main__' :
