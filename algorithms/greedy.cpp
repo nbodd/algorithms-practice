@@ -28,6 +28,7 @@ bool lexographic_grid(vector<vector<char>> & grid) {
     return true;
 }
 
+/*
 int main() {
     int testCases;
     cin >> testCases;
@@ -43,6 +44,38 @@ int main() {
             grid.push_back(row);
         }
         cout << (lexographic_grid(grid) ? "YES" : "NO") << endl;
+    }
+    return 0;
+}
+*/
+
+bool burger_orders_sort(pair<int, int> & a, pair<int, int>& b) {
+    if (a.second == b.second) {
+        return a.first < a.second;
+    }
+    return (a.second < b.second);
+}
+
+void burger_orders(vector<pair<int, int>> &orders, vector<int> & delivery) {
+    std::sort(orders.begin(), orders.end(), burger_orders_sort);
+    for (auto& order : orders) {
+        delivery.push_back(order.first);
+    }
+}
+
+int burgers_main() {
+    int burgers;
+    cin >> burgers;
+    vector<pair<int, int>> orders;
+    for (int i=0; i<burgers; ++i) {
+        int time; int duration;
+        cin >> time >> duration;
+        orders.push_back(pair<int, int>(i + 1, time + duration));
+    }
+    vector<int> delivery;
+    burger_orders(orders, delivery);
+    for (auto val : delivery) {
+        cout << val << " ";
     }
     return 0;
 }
