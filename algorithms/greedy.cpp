@@ -8,6 +8,8 @@
 
 #include <vector>
 #include <iostream>
+#include <cmath>
+#include <stdint.h>
 #include <queue>
 
 using namespace std;
@@ -28,27 +30,6 @@ bool lexographic_grid(vector<vector<char>> & grid) {
     
     return true;
 }
-
-/*
-int main() {
-    int testCases;
-    cin >> testCases;
-    for (int i=0; i<testCases; ++i) {
-        int n;
-        cin >> n;
-        vector<vector<char>> grid;
-        for (int j=0; j<n; ++j) {
-            string text;
-            cin >> text;
-            vector<char> row;
-            row.insert(row.begin(), text.begin(), text.end());
-            grid.push_back(row);
-        }
-        cout << (lexographic_grid(grid) ? "YES" : "NO") << endl;
-    }
-    return 0;
-}
-*/
 
 bool burger_orders_sort(pair<int, int> & a, pair<int, int>& b) {
     if (a.second == b.second) {
@@ -141,3 +122,82 @@ int largest_permutation_main() {
     
     return 0;
 }
+
+class CutStyle {
+public:
+    bool row;
+    unsigned long long cutCost;
+    int cutIndex;
+    
+    CutStyle(int cost, int index, bool _row = true)
+        : row(_row),
+        cutCost(cost),
+        cutIndex(index)
+    {
+        
+    }
+    
+    CutStyle(const CutStyle& other) {
+        row = other.row;
+        cutCost = other.cutCost;
+        cutIndex = other.cutIndex;
+    }
+};
+
+bool CutStyleCompare(const shared_ptr<CutStyle> a, const shared_ptr<CutStyle> b) {
+    return a->cutCost > b->cutCost;
+}
+
+int square_board_cuts() {
+    int testCases;
+    cin >> testCases;
+    for (int i=0; i<testCases; ++i) {
+        int m, n;
+        cin >> m >> n;
+        
+        vector<shared_ptr<CutStyle>> cuts;
+        
+        for (int j=0; j<m-1; ++j) {
+            int cost;
+            cin >> cost;
+            auto cut = make_shared<CutStyle>(cost, j, true);
+            cuts.push_back(cut);
+        }
+        
+        for (int j=0; j<n-1; ++j) {
+            int cost;
+            cin >> cost;
+            auto cut = make_shared<CutStyle>(cost, j, false);
+            cuts.push_back(cut);
+        }
+        
+        // greedy - sort them
+        std::sort(cuts.begin(), cuts.end(), CutStyleCompare);
+        
+        // greedy - pick the expensive one and cut
+        int rowCuts = 0;
+        int colCuts = 0;
+        
+        int64_t result = 0;
+        for (int currentCutIndex = 0; currentCutIndex < cuts.size(); ++currentCutIndex) {
+            const auto& currentCut = cuts[currentCutIndex];
+            
+            int previousCuts = 0;
+            if (currentCut->row) {
+                previousCuts = colCuts;
+                rowCuts++;
+            } else {
+                previousCuts = rowCuts;
+                colCuts++;
+            }
+            
+            result += (previousCuts + 1) * currentCut->cutCost;
+        }
+        
+        result %= ((int64_t) std::pow(10, 9) + 7);
+        cout << result << endl;
+    }
+    return 0;
+}
+
+
