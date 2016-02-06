@@ -138,3 +138,95 @@ void floydWarshall(const Graph & graph, vector<vector<int>> & distance) {
         }
     }
 }
+
+#include <set>
+
+int crab_graphs(const Graph& graph, int feet) {
+    set<Node> remainingNodes;
+    priority_queue<pair<int, Node>, vector<pair<int, Node>>, EdgeCompare> numEdgesofNodes;
+    
+    for (int i=1; i<graph.nodeTraverseLimit(); ++i) {
+        remainingNodes.insert(i);
+        numEdgesofNodes.push(pair<int, Node>(graph.getEdges(i).size(), i));
+    }
+    
+    int crabs = 0;
+    int crabVertices = 0;
+    while (false == remainingNodes.empty() && false == numEdgesofNodes.empty()) {
+        int numEdges = numEdgesofNodes.top().first;
+        const auto& currentNode = numEdgesofNodes.top().second;
+        numEdgesofNodes.pop();
+        
+        if (numEdges >= feet) {
+            auto currentNodeEdges = graph.getEdges(currentNode);
+            int nodeCounter = 0;
+            
+            for (auto edge : currentNodeEdges) {
+                Node toNode = edge->to;
+                
+                auto remainingNodesItr = remainingNodes.find(toNode);
+                if (remainingNodesItr != remainingNodes.end()) {
+                    nodeCounter++;
+                    remainingNodes.erase(remainingNodesItr);
+                    
+                    if (nodeCounter == feet) {
+                        crabs++;
+                        
+                        // remove the currentNode from remaining nodes
+                        remainingNodes.erase(currentNode);
+                        crabVertices += (feet + 1); //1 for currentNode
+                        
+                        break;
+                    }
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    
+    return crabVertices;
+}
+
+void connectedComponent(const vector<vector<int>> &pairs, int start, vector<int>& ccData, vector<bool>& visited) {
+    visited[start] = true;
+    ccData[ccData.size() - 1]++;
+    for (auto nextVertex : pairs[start]) {
+        if (visited[nextVertex] == false) {
+            connectedComponent(pairs, nextVertex, ccData, visited);
+        }
+    }
+}
+
+int journey_to_moon()
+{
+    int N, I;
+    cin >> N >> I;
+    vector<vector<int> > pairs(N);
+    for (int i = 0; i < I; ++i) {
+        int a, b;
+        cin >> a >> b;
+        pairs[a].push_back(b);
+        pairs[b].push_back(a);
+    }
+    
+    long long result = 0;
+    vector<int> numAstronautsCC(N);
+    vector<bool> visited(N, false);
+    for (int i=0; i<N; ++i) {
+        if (visited[i] == false) {
+            numAstronautsCC.push_back(0);
+            connectedComponent(pairs, i, numAstronautsCC, visited);
+        }
+    }
+    
+    for (auto val : numAstronautsCC) {
+        result += (N - val) * val;
+    }
+    
+   
+    cout << result / 2 << endl;
+    return 0;
+}
