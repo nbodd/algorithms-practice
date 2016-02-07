@@ -140,3 +140,67 @@ int counting_sort() {
     
     return 0;
 }
+
+struct ElementNode {
+    int value;
+    int index;
+};
+
+struct ElementDiffNode {
+    int diff;
+    int xIndex;
+    int yIndex;
+};
+
+bool ElementNodeSort(const ElementNode& a, const ElementNode & b) {
+    return a.value < b.value;
+}
+
+bool ElementDiffSort(const ElementDiffNode& a, const ElementDiffNode & b) {
+    return a.diff < b.diff;
+}
+
+void smallest_absolute_difference() {
+    int n;
+    cin >> n;
+    
+    vector <ElementNode> arr;
+    vector<int> data(n);
+    for(int i = 0; i < n; ++i) {
+        cin >> data[i];
+        ElementNode e;
+        e.value = data[i];
+        e.index = i;
+        arr.push_back(e);
+    }
+    
+    vector<ElementDiffNode> absDiff;
+    std::sort(arr.begin(), arr.end(), ElementNodeSort);
+    for (int i=1; i < n; ++i) {
+        int diff = abs(arr[i].value - arr[i-1].value);
+        ElementDiffNode e;
+        e.diff = diff;
+        
+        int x = arr[i-1].index;
+        int y = arr[i].index;
+        
+        e.xIndex = (data[x] < data[y]) ? x : y;
+        e.yIndex = (data[y] > data[x]) ? y : x;
+        
+        absDiff.push_back(e);
+    }
+    
+    const auto minItr = min_element(absDiff.begin(), absDiff.end(), ElementDiffSort);
+    
+    int minValue = minItr->diff;
+    for (int i = 0; i < absDiff.size(); ++i) {
+        if (absDiff[i].diff == minValue) {
+            cout << data[absDiff[i].xIndex] << " " << data[absDiff[i].yIndex] << " ";
+        }
+    }
+}
+
+int main() {
+    smallest_absolute_difference();
+    return 0;
+}
