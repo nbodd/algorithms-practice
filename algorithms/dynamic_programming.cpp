@@ -82,7 +82,7 @@ void coin_change_problem() {
     cout << coinChangeGrid[money][numOfCoins] << endl;
 }
 
-int school_teacher_candies() {
+void school_teacher_candies() {
     int N;
     cin >> N;
     
@@ -112,5 +112,56 @@ int school_teacher_candies() {
         sum += val;
     }
     cout << sum << endl;
+}
+
+bool ReverseSort(int64_t a, int64_t b) {
+    return a > b;
+}
+
+
+// stock maximize
+// greedy approach?
+// and dynamic too
+void stock_profit_maximize() {
+    int testCases;
+    cin >> testCases;
     
+    for (int test=0; test<testCases; ++test) {
+        int days;
+        cin >> days;
+        
+        vector<int64_t> prices(days + 1, 0);
+        for (int j=1; j<=days; ++j) {
+            cin >> prices[j];
+        }
+        
+        vector<int64_t> profit(days + 1, 0);
+        int64_t totalCost = 0;
+        int totalShares = 0;
+        bool newMaxPriceNeeded = true;
+        int64_t max_price = 0;
+        for (int day=1; day <= days; ++day) {
+            if (newMaxPriceNeeded) {
+                max_price = *max_element(prices.begin() + day, prices.end());
+            }
+            
+            if ( prices[day] < max_price) {
+                // buy
+                totalCost += prices[day];
+                totalShares += 1;
+                profit[day] = profit[day - 1];
+                
+                newMaxPriceNeeded = false;
+            } else if (prices[day] == max_price) {
+                // sell all
+                
+                profit[day] = profit[day-1] + (prices[day] * totalShares - totalCost);
+                totalShares = 0;
+                totalCost = 0;
+                newMaxPriceNeeded = true;
+            }
+        }
+        
+        cout << profit[days] << endl;
+    }
 }
