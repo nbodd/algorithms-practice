@@ -200,7 +200,63 @@ void smallest_absolute_difference() {
     }
 }
 
+int median_partition(vector<int> & data, int startIndex, int endIndex, int medianIndex) {
+    
+    int pivotValue = data[endIndex];
+    int low = startIndex;
+    for (int traverse=startIndex; traverse<=endIndex-1; ++traverse) {
+        if (data[traverse] < pivotValue) {
+            int temp = data[low];
+            data[low] = data[traverse];
+            data[traverse] = temp;
+            low++;
+        }
+    }
+    
+    int temp = data[low];
+    data[low] = pivotValue;
+    data[endIndex] = temp;
+    
+    if (low == medianIndex) {
+        return pivotValue;
+    } else if (low > medianIndex) {
+        return median_partition(data, startIndex, low-1, medianIndex);
+    } else {
+        return median_partition(data, low+1, endIndex, medianIndex);
+    }
+}
+
+void find_median() {
+    int n;
+    cin >> n;
+    
+    vector<int> data(n);
+    for(int i = 0; i < n; ++i) {
+        cin >> data[i];
+    }
+    
+    cout << median_partition(data, 0, n-1, n/2) << endl;
+}
+
+void rotated_array() {
+    int N, K, Q;
+    cin >> N >> K >> Q;
+    
+    vector<int> data(N);
+    for(int i = 0; i < N; ++i) {
+        cin >> data[i];
+    }
+    
+    int query;
+    for (int i=0; i < Q; ++i) {
+        cin >> query;
+        
+        K = K % N;
+
+        cout << data[ (N + query - K ) % N ] << endl;
+    }
+}
+
 int main() {
-    smallest_absolute_difference();
     return 0;
 }
