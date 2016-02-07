@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <map>
+
 using namespace std;
 
 void printArray(vector<int>& arr) {
@@ -255,6 +257,125 @@ void rotated_array() {
 
         cout << data[ (N + query - K ) % N ] << endl;
     }
+}
+
+bool sorted(vector<int> & data) {
+    for (int i=1; i<data.size(); ++i) {
+        if (data[i] < data[i-1]) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+void almost_sorted() {
+    int n;
+    cin >> n;
+    
+    vector<int> data(n);
+    for(int i = 0; i < n; ++i) {
+        cin >> data[i];
+    }
+    
+    if (sorted(data)) {
+        cout << "yes" << endl;
+        return;
+    }
+    
+    // else
+    int firstDip = 0;
+    for (int i=1; i<data.size(); ++i) {
+        if (data[i] < data[i-1]) {
+            firstDip = i-1;
+            break;
+        }
+    }
+    
+    int secondDip = data.size() - 1;
+    for (int i=firstDip+1; i < data.size(); ++i) {
+        if (data[firstDip] < data[i]) {
+            secondDip = i - 1;
+            break;
+        }
+    }
+    
+    int temp = data[firstDip];
+    data[firstDip] = data[secondDip];
+    data[secondDip] = temp;
+    
+    if (sorted(data)) {
+        cout << "yes" << endl << "swap " << firstDip + 1 << " " << secondDip + 1 << endl;
+        return;
+    } else {
+        //undo swap
+        int temp = data[firstDip];
+        data[firstDip] = data[secondDip];
+        data[secondDip] = temp;
+        
+    }
+    
+    // if not reverse between first and second dips
+    std::reverse(data.begin() + firstDip, data.begin() + secondDip + 1);
+    
+    if (sorted(data)) {
+        cout << "yes" << endl << "reverse " << firstDip + 1 << " " << secondDip + 1<< endl;
+    } else {
+        cout << "no" << endl;
+    }
+    
+}
+
+int64_t permutations(int n, int r) {
+    if (r > n) {
+        return 0;
+    }
+    
+    int64_t result = 1;
+    int base = n - r;
+    for (int j = base+1; j <= n; ++j) {
+        result *= j;
+    }
+    return result;
+}
+
+void sherlock_and_pairs() {
+    int testCases;
+    cin >> testCases;
+    
+    for (int test=0; test < testCases; ++test) {
+        int n;
+        cin >> n;
+        
+        vector <int64_t> arr(n);
+        for(int i = 0; i < (int)n; ++i) {
+            cin >> arr[i];
+        }
+        
+        //std::sort(arr.begin(), arr.end());
+        
+        map<int64_t, int> pairs;
+        for (int i=0; i<arr.size(); ++i) {
+            int key = arr[i];
+            if (pairs.find(key) != pairs.end()) {
+                pairs[key] += 1;
+            } else {
+                pairs[key] = 1;
+            }
+        }
+        
+        int64_t count = 0;
+        for (auto it = pairs.begin(); it != pairs.end(); ++it) {
+            if (it->second > 1) {
+                count += permutations(it->second, 2);
+            }
+        }
+        cout << count << endl;
+    }
+}
+
+void unfairness() {
+    
 }
 
 int main() {
