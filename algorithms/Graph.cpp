@@ -277,7 +277,6 @@ void connected_grid() {
     
 }
 
-int main() {
-    connected_grid();
+int graph_main() {
     return 0;
 }
