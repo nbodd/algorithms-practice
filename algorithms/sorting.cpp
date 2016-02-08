@@ -374,10 +374,33 @@ void sherlock_and_pairs() {
     }
 }
 
-void unfairness() {
+void array_unfairness() {
+    int N, K;
+    cin >> N >> K;
     
+    vector <int64_t> arr(N);
+    for(int i = 0; i < (int) N; ++i) {
+        cin >> arr[i];
+    }
+    
+    std::sort(arr.begin(), arr.end());
+    
+    int64_t minUnfairness = 99999999;
+    for (int i=0; i <= (N-K); ++i) {
+        int64_t max = arr[i+K-1];
+        int64_t min = arr[i];
+        
+        int64_t unfairness = max - min;
+        if (unfairness < minUnfairness) {
+            minUnfairness = unfairness;
+        }
+    }
+    
+    
+    cout << minUnfairness << endl;
 }
 
-int main() {
+int sorting_main2() {
+    array_unfairness();
     return 0;
 }

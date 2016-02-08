@@ -230,3 +230,54 @@ int journey_to_moon()
     cout << result / 2 << endl;
     return 0;
 }
+
+void connectedComponentsGrid(vector<vector<int>> & data, int row, int col, vector<vector<bool>> & visited, vector<int> & cc) {
+    visited[row][col] = true;
+    cc[cc.size() - 1]++;
+    // check 8 blocks around the box
+    for (int i = row - 1; i <= (row + 1); ++i) {
+        for (int j = col - 1; j <= (col + 1); ++j) {
+            bool rowLimits = (i >= 0 && i < data.size());
+            bool colLimits = (j >= 0 && j < data[col].size());
+            if ( rowLimits && colLimits) {
+                if (false == visited[i][j] && data[i][j]) {
+                    connectedComponentsGrid(data, i, j, visited, cc);
+                }
+            }
+        }
+    }
+}
+
+void connected_grid() {
+    int m, n;
+    cin >> m >> n;
+    
+    vector<vector<int>> data(m);
+    vector<vector<bool>> visited(m);
+    for (int row=0; row<m; ++row) {
+        data[row].resize(n);
+        visited[row].resize(n);
+        for (int col = 0; col < n ; ++col) {
+            cin >> data[row][col];
+            visited[row][col] = false;
+        }
+    }
+    
+    vector<int> cc;
+    for (int row=0; row < m; ++row) {
+        for (int col=0; col < n; ++col) {
+            if (data[row][col]) {
+                cc.push_back(0);
+                connectedComponentsGrid(data, row, col, visited, cc);
+            }
+        }
+    }
+    
+    cout << *max_element(cc.begin(), cc.end()) << endl;
+    
+}
+
+int main() {
+    connected_grid();
+    return 0;
+}
