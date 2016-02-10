@@ -154,7 +154,6 @@ void cut_the_tree() {
     cout << *min_element(tree_diff.begin(), tree_diff.end()) << endl;
 }
 
-int main() {
-    cut_the_tree();
+int searching_main() {
     return 0;
 }
