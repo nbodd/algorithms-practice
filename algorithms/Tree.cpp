@@ -8,6 +8,7 @@
 
 #include "Tree.h"
 #include <queue>
+#include <iostream>
 
 void GraphTree::subtreeSize(Node node, vector<int> & forestSizes) const {
     const auto& currentNodeEdges = m_tree.getEdges(node);
@@ -70,4 +71,83 @@ int evenTree(const GraphTree & tree) {
     }
     
     return edgesRemoved;
+}
+
+struct TreeNode {
+    int value;
+    shared_ptr<TreeNode> left;
+    shared_ptr<TreeNode> right;
+};
+
+void printTree(shared_ptr<TreeNode> tree) {
+    if (tree != nullptr) {
+        cout << tree->value << " ";
+        printTree(tree->left);
+        printTree(tree->right);
+    }
+}
+
+shared_ptr<TreeNode> recurse_inorder_postorder(vector<int>& inorder,
+                            vector<int>& postorder, int inStart, int inEnd,
+                                        int postStart, int postEnd) {
+    
+    if (inStart > inEnd) {
+        return nullptr;
+    } else if (inStart == inEnd) {
+        shared_ptr<TreeNode> currentNode = make_shared<TreeNode>();
+        currentNode->value = inorder[inStart];
+        currentNode->left = nullptr;
+        currentNode->right = nullptr;
+        return currentNode;
+    } else {
+        shared_ptr<TreeNode> currentNode = make_shared<TreeNode>();
+        int nodeValue = postorder[postEnd];
+        currentNode->value = nodeValue;
+        
+        //find nodeValue in inorder
+        int inorder_index = -1;
+        for (int i=inStart; i<=inEnd; ++i) {
+            if (inorder[i] == nodeValue) {
+                inorder_index = i;
+                break;
+            }
+        }
+        
+        int length = inorder_index - inStart;
+        
+        currentNode->left = recurse_inorder_postorder(inorder , postorder,
+                                                      inStart, inorder_index - 1,
+                                                       postStart, postStart + length - 1);
+        currentNode->right = recurse_inorder_postorder(inorder, postorder,
+                                                       inorder_index + 1, inEnd,
+                                                       postStart + length, postEnd - 1);
+        
+        return currentNode;
+    }
+}
+
+void construct_tree_from_inorder_postorder() {
+    int n = 8;
+    //cin >> n;
+    
+    vector<int> inorder = { 4, 2, 5, 1, 6, 7, 3, 8};
+    /*
+    for (int i=0; i<n; ++i) {
+        cin >> inorder[i];
+    } */
+    
+    vector<int> postorder = {4, 5, 2, 6, 7, 8, 3, 1};
+    /*
+    for (int i=0; i<n; ++i) {
+        cin >> postorder[i];
+    }*/
+    
+    shared_ptr<TreeNode> tree = recurse_inorder_postorder(inorder, postorder, 0, n-1, 0, n-1);
+    
+    printTree(tree);
+}
+
+int main() {
+    construct_tree_from_inorder_postorder();
+    return 0;
 }
