@@ -147,7 +147,61 @@ void construct_tree_from_inorder_postorder() {
     printTree(tree);
 }
 
-int main() {
-    construct_tree_from_inorder_postorder();
+shared_ptr<TreeNode> recurse_inorder_preorder(vector<int>& inorder, vector<int> &preorder,
+                                              int inStart, int inEnd, int preStart, int preEnd) {
+    
+    if (inStart > inEnd) {
+        return nullptr;
+    } else if (inStart == inEnd) {
+        shared_ptr<TreeNode> current = make_shared<TreeNode>();
+        current->value = inorder[inStart];
+        current->left = nullptr;
+        current->right = nullptr;
+        return current;
+    } else {
+        shared_ptr<TreeNode> current = make_shared<TreeNode>();
+        int nodeValue = preorder[preStart];
+        current->value = nodeValue;
+        
+        int inorder_index = -1;
+        for (int i=inStart; i<=inEnd; ++i) {
+            if (inorder[i] == nodeValue) {
+                inorder_index = i;
+                break;
+            }
+        }
+        
+        int length = (inorder_index - inStart);
+        
+        current->left = recurse_inorder_preorder(inorder, preorder, inStart, inorder_index - 1, preStart + 1, preStart + length);
+        current->right = recurse_inorder_preorder(inorder, preorder, inorder_index + 1, inEnd, preStart + length + 1, preEnd);
+        return current;
+    }
+}
+
+void construct_tree_from_inorder_preorder() {
+    int n = 8;
+    //cin >> n;
+    
+    vector<int> inorder = { 4, 2, 5, 1, 6, 7, 3, 8};
+    /*
+     for (int i=0; i<n; ++i) {
+     cin >> inorder[i];
+     } */
+    
+    vector<int> preorder = {1, 2, 4, 5, 3, 7, 6, 8};
+    /*
+     for (int i=0; i<n; ++i) {
+     cin >> postorder[i];
+     }*/
+    
+    shared_ptr<TreeNode> tree = recurse_inorder_preorder(inorder, preorder, 0, n-1, 0, n-1);
+    
+    printTree(tree);
+}
+
+int tree_main() {
+    //construct_tree_from_inorder_postorder();
+    construct_tree_from_inorder_preorder();
     return 0;
 }
