@@ -142,9 +142,94 @@ def greedy_florist():
     print(result)
 
 
-def main():
-    [N, K] = map(int, raw_input().split(' '))
-    A = map(int, raw_input().split(' '))
+def hermoine_check_tree(grid, x, y, prevX, prevY):
+    if (x >= 0 and x < len(grid[0])):
+        if (y >= 0 and y < len(grid)):
+            if (x != prevX or y != prevY):
+                return grid[y][x] != 'X'
+
+    return False
+
+def hermoine_path_recurse(grid, currentX, currentY, prevX, prevY, wandCount ):
+    if (grid[currentY][currentX] == '*'):
+        return (True, wandCount)
+
+    num_ways = 0
+    if (hermoine_check_tree(grid, currentX - 1, currentY, prevX, prevY)):
+        num_ways += 1
+    if (hermoine_check_tree(grid, currentX, currentY+1, prevX, prevY)):
+        num_ways += 1
+    if (hermoine_check_tree(grid, currentX+1, currentY, prevX, prevY)):
+        num_ways += 1
+    if (hermoine_check_tree(grid, currentX, currentY - 1, prevX, prevY)):
+        num_ways += 1
+
+    newWandCount = wandCount
+    if num_ways > 1:
+        newWandCount  = wandCount + 1
+
+    found = False
+    left = (False, newWandCount)
+    if (hermoine_check_tree(grid, currentX-1, currentY, prevX, prevY)):
+        left = hermoine_path_recurse(grid, currentX-1, currentY, currentX, currentY, newWandCount)
+        if (left[0]):
+            found = True
+
+    up = (False, newWandCount)
+    if not found and (hermoine_check_tree(grid, currentX, currentY-1, prevX, prevY)):
+        up = hermoine_path_recurse(grid, currentX, currentY-1, currentX, currentY, newWandCount)
+        if (up[0]):
+            found = True
+
+    right = (False, newWandCount)
+    if not found and (hermoine_check_tree(grid, currentX+1, currentY, prevX, prevY)):
+        right = hermoine_path_recurse(grid, currentX+1, currentY, currentX, currentY, newWandCount)
+        if right[0]:
+            found = True
+
+    down = (False, newWandCount)
+    if not found and (hermoine_check_tree(grid, currentX, currentY+1, prevX, prevY)):
+        down = hermoine_path_recurse(grid, currentX, currentY+1, currentX, currentY, newWandCount)
+        if down[0]:
+            found = True
+
+    if (left[0]):
+        return left
+    if (up[0]):
+        return up
+    if (down[0]):
+        return down
+    if (right[0]):
+        return right
+
+    return (False, newWandCount)
+
+
+def hermoine_magic_forest_count_luck():
+    testCases = int(raw_input())
+    for test in range(testCases):
+        N, M = map(int, raw_input().split(' '))
+        grid = []
+        for row in range(N):
+            grid.append(list( raw_input()))
+
+        K = int(raw_input())
+
+        for row in range(N):
+            for col in range(M):
+                if (grid[row][col] == 'M'):
+                    currentY = row
+                    currentX = col
+
+        res = hermoine_path_recurse(grid, currentX, currentY, None, None, 0)
+
+        if res[0] and res[1] == K:
+            print ('Impressed')
+        else :
+            print ('Oops!')
+
+def main() :
+    hermoine_magic_forest_count_luck()
 
 
 if __name__ == '__main__' :
